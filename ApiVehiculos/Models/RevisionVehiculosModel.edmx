@@ -1,0 +1,412 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RevisionVehiculosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Inspeccion">
+          <Key>
+            <PropertyRef Name="IdInspeccion" />
+          </Key>
+          <Property Name="IdInspeccion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdRevision" Type="int" />
+          <Property Name="IdTipoRevision" Type="int" />
+          <Property Name="Observaciones" Type="varchar" MaxLength="250" />
+          <Property Name="Estado" Type="varchar" MaxLength="250" />
+          <Property Name="IdPersona" Type="int" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="IdPersona" />
+          </Key>
+          <Property Name="IdPersona" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Identificacion" Type="varchar" MaxLength="255" />
+          <Property Name="Nombre" Type="varchar" MaxLength="255" />
+          <Property Name="Apellido" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Revision">
+          <Key>
+            <PropertyRef Name="IdRevision" />
+          </Key>
+          <Property Name="IdRevision" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdVehiculo" Type="int" />
+          <Property Name="Aprobado" Type="bit" />
+          <Property Name="Observaciones" Type="varchar" MaxLength="250" />
+          <Property Name="IdPersona" Type="int" />
+          <Property Name="FechaRevision" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TipoRevision">
+          <Key>
+            <PropertyRef Name="IdTipoRevision" />
+          </Key>
+          <Property Name="IdTipoRevision" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreTipo" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="IdVehiculo" />
+          </Key>
+          <Property Name="IdVehiculo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Marca" Type="varchar" MaxLength="255" />
+          <Property Name="Modelo" Type="varchar" MaxLength="255" />
+          <Property Name="Patente" Type="varchar" MaxLength="10" />
+          <Property Name="Año" Type="int" />
+          <Property Name="IdPersona" Type="int" />
+        </EntityType>
+        <Association Name="FK_IdPersona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Vehiculo">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdPersonaIns">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Inspeccion" Type="Self.Inspeccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Inspeccion">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdPersonaRev">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Revision" Type="Self.Revision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Revision">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdRevision">
+          <End Role="Revision" Type="Self.Revision" Multiplicity="0..1" />
+          <End Role="Inspeccion" Type="Self.Inspeccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Revision">
+              <PropertyRef Name="IdRevision" />
+            </Principal>
+            <Dependent Role="Inspeccion">
+              <PropertyRef Name="IdRevision" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdTipoRevision">
+          <End Role="TipoRevision" Type="Self.TipoRevision" Multiplicity="0..1" />
+          <End Role="Inspeccion" Type="Self.Inspeccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoRevision">
+              <PropertyRef Name="IdTipoRevision" />
+            </Principal>
+            <Dependent Role="Inspeccion">
+              <PropertyRef Name="IdTipoRevision" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdVehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="0..1" />
+          <End Role="Revision" Type="Self.Revision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="IdVehiculo" />
+            </Principal>
+            <Dependent Role="Revision">
+              <PropertyRef Name="IdVehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RevisionVehiculosModelStoreContainer">
+          <EntitySet Name="Inspeccion" EntityType="Self.Inspeccion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Revision" EntityType="Self.Revision" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoRevision" EntityType="Self.TipoRevision" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IdPersona" Association="Self.FK_IdPersona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdPersonaIns" Association="Self.FK_IdPersonaIns">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Inspeccion" EntitySet="Inspeccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdPersonaRev" Association="Self.FK_IdPersonaRev">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Revision" EntitySet="Revision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdRevision" Association="Self.FK_IdRevision">
+            <End Role="Revision" EntitySet="Revision" />
+            <End Role="Inspeccion" EntitySet="Inspeccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdTipoRevision" Association="Self.FK_IdTipoRevision">
+            <End Role="TipoRevision" EntitySet="TipoRevision" />
+            <End Role="Inspeccion" EntitySet="Inspeccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdVehiculo" Association="Self.FK_IdVehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+            <End Role="Revision" EntitySet="Revision" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RevisionVehiculosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Inspeccion">
+          <Key>
+            <PropertyRef Name="IdInspeccion" />
+          </Key>
+          <Property Name="IdInspeccion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdRevision" Type="Int32" />
+          <Property Name="IdTipoRevision" Type="Int32" />
+          <Property Name="Observaciones" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Estado" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IdPersona" Type="Int32" />
+          <NavigationProperty Name="Persona" Relationship="Self.FK_IdPersonaIns" FromRole="Inspeccion" ToRole="Persona" />
+          <NavigationProperty Name="Revision" Relationship="Self.FK_IdRevision" FromRole="Inspeccion" ToRole="Revision" />
+          <NavigationProperty Name="TipoRevision" Relationship="Self.FK_IdTipoRevision" FromRole="Inspeccion" ToRole="TipoRevision" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="IdPersona" />
+          </Key>
+          <Property Name="IdPersona" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Identificacion" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Nombre" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Apellido" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Inspeccion" Relationship="Self.FK_IdPersonaIns" FromRole="Persona" ToRole="Inspeccion" />
+          <NavigationProperty Name="Vehiculo" Relationship="Self.FK_IdPersona" FromRole="Persona" ToRole="Vehiculo" />
+          <NavigationProperty Name="Revision" Relationship="Self.FK_IdPersonaRev" FromRole="Persona" ToRole="Revision" />
+        </EntityType>
+        <EntityType Name="Revision">
+          <Key>
+            <PropertyRef Name="IdRevision" />
+          </Key>
+          <Property Name="IdRevision" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdVehiculo" Type="Int32" />
+          <Property Name="Aprobado" Type="Boolean" />
+          <Property Name="Observaciones" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IdPersona" Type="Int32" />
+          <Property Name="FechaRevision" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Inspeccion" Relationship="Self.FK_IdRevision" FromRole="Revision" ToRole="Inspeccion" />
+          <NavigationProperty Name="Persona" Relationship="Self.FK_IdPersonaRev" FromRole="Revision" ToRole="Persona" />
+          <NavigationProperty Name="Vehiculo" Relationship="Self.FK_IdVehiculo" FromRole="Revision" ToRole="Vehiculo" />
+        </EntityType>
+        <EntityType Name="TipoRevision">
+          <Key>
+            <PropertyRef Name="IdTipoRevision" />
+          </Key>
+          <Property Name="IdTipoRevision" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreTipo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Inspeccion" Relationship="Self.FK_IdTipoRevision" FromRole="TipoRevision" ToRole="Inspeccion" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="IdVehiculo" />
+          </Key>
+          <Property Name="IdVehiculo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Marca" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Modelo" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Patente" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Año" Type="Int32" />
+          <Property Name="IdPersona" Type="Int32" />
+          <NavigationProperty Name="Persona" Relationship="Self.FK_IdPersona" FromRole="Vehiculo" ToRole="Persona" />
+          <NavigationProperty Name="Revision" Relationship="Self.FK_IdVehiculo" FromRole="Vehiculo" ToRole="Revision" />
+        </EntityType>
+        <Association Name="FK_IdPersonaIns">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Inspeccion" Type="Self.Inspeccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Inspeccion">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdRevision">
+          <End Role="Revision" Type="Self.Revision" Multiplicity="0..1" />
+          <End Role="Inspeccion" Type="Self.Inspeccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Revision">
+              <PropertyRef Name="IdRevision" />
+            </Principal>
+            <Dependent Role="Inspeccion">
+              <PropertyRef Name="IdRevision" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdTipoRevision">
+          <End Role="TipoRevision" Type="Self.TipoRevision" Multiplicity="0..1" />
+          <End Role="Inspeccion" Type="Self.Inspeccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoRevision">
+              <PropertyRef Name="IdTipoRevision" />
+            </Principal>
+            <Dependent Role="Inspeccion">
+              <PropertyRef Name="IdTipoRevision" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdPersona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Vehiculo">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdPersonaRev">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Revision" Type="Self.Revision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="IdPersona" />
+            </Principal>
+            <Dependent Role="Revision">
+              <PropertyRef Name="IdPersona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IdVehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="0..1" />
+          <End Role="Revision" Type="Self.Revision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="IdVehiculo" />
+            </Principal>
+            <Dependent Role="Revision">
+              <PropertyRef Name="IdVehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RevisionVehiculosEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Inspeccion" EntityType="Self.Inspeccion" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" />
+          <EntitySet Name="Revision" EntityType="Self.Revision" />
+          <EntitySet Name="TipoRevision" EntityType="Self.TipoRevision" />
+          <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" />
+          <AssociationSet Name="FK_IdPersonaIns" Association="Self.FK_IdPersonaIns">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Inspeccion" EntitySet="Inspeccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdRevision" Association="Self.FK_IdRevision">
+            <End Role="Revision" EntitySet="Revision" />
+            <End Role="Inspeccion" EntitySet="Inspeccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdTipoRevision" Association="Self.FK_IdTipoRevision">
+            <End Role="TipoRevision" EntitySet="TipoRevision" />
+            <End Role="Inspeccion" EntitySet="Inspeccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdPersona" Association="Self.FK_IdPersona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdPersonaRev" Association="Self.FK_IdPersonaRev">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Revision" EntitySet="Revision" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IdVehiculo" Association="Self.FK_IdVehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+            <End Role="Revision" EntitySet="Revision" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RevisionVehiculosModelStoreContainer" CdmEntityContainer="RevisionVehiculosEntities">
+          <EntitySetMapping Name="Inspeccion">
+            <EntityTypeMapping TypeName="RevisionVehiculosModel.Inspeccion">
+              <MappingFragment StoreEntitySet="Inspeccion">
+                <ScalarProperty Name="IdInspeccion" ColumnName="IdInspeccion" />
+                <ScalarProperty Name="IdRevision" ColumnName="IdRevision" />
+                <ScalarProperty Name="IdTipoRevision" ColumnName="IdTipoRevision" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persona">
+            <EntityTypeMapping TypeName="RevisionVehiculosModel.Persona">
+              <MappingFragment StoreEntitySet="Persona">
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+                <ScalarProperty Name="Identificacion" ColumnName="Identificacion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Revision">
+            <EntityTypeMapping TypeName="RevisionVehiculosModel.Revision">
+              <MappingFragment StoreEntitySet="Revision">
+                <ScalarProperty Name="IdRevision" ColumnName="IdRevision" />
+                <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
+                <ScalarProperty Name="Aprobado" ColumnName="Aprobado" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+                <ScalarProperty Name="FechaRevision" ColumnName="FechaRevision" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoRevision">
+            <EntityTypeMapping TypeName="RevisionVehiculosModel.TipoRevision">
+              <MappingFragment StoreEntitySet="TipoRevision">
+                <ScalarProperty Name="IdTipoRevision" ColumnName="IdTipoRevision" />
+                <ScalarProperty Name="NombreTipo" ColumnName="NombreTipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehiculo">
+            <EntityTypeMapping TypeName="RevisionVehiculosModel.Vehiculo">
+              <MappingFragment StoreEntitySet="Vehiculo">
+                <ScalarProperty Name="IdVehiculo" ColumnName="IdVehiculo" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="Patente" ColumnName="Patente" />
+                <ScalarProperty Name="Año" ColumnName="Año" />
+                <ScalarProperty Name="IdPersona" ColumnName="IdPersona" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
